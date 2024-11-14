@@ -1,6 +1,8 @@
 Note: 
       The repo contains the improved version of the quarter round rtl code as compared to the base rtl of secworks.        The chacha_qr.v is modified in such a way that it suits the pipelining approaches.
       Also the tb_chacha.v has been modified, the signal tb_error has been removed and error_found signal is               initialised properly.
+      The given rtl has been tested and synthesized using cadence design suite. Achieved 1.94% ,17.8% of area              reduction and power reduction respectively.
+
 
 [![build-openlane-sky130](https://github.com/secworks/chacha/actions/workflows/ci.yml/badge.svg?branch=master&event=push)](https://github.com/secworks/chacha/actions/workflows/ci.yml)
 
