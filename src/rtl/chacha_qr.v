@@ -76,7 +76,7 @@ module chacha_qr(
       wire [31 : 0] d1;
       wire [31 : 0] d2;
       wire [31 : 0] d3;
-      wire [31:0] a0_, d1_, c0_, b1_;
+      
       
     
      quarter_round q1(a, b, d, 2'd0, a0, d1);
