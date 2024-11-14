@@ -38,9 +38,7 @@
 //
 //======================================================================
 
-`default_nettype none
-
-module chacha_qr(
+module chacha_qr( 
                  input wire [31 : 0]  a,
                  input wire [31 : 0]  b,
                  input wire [31 : 0]  c,
@@ -55,64 +53,40 @@ module chacha_qr(
   //----------------------------------------------------------------
   // Wires.
   //----------------------------------------------------------------
-  reg [31 : 0] internal_a_prim;
-  reg [31 : 0] internal_b_prim;
-  reg [31 : 0] internal_c_prim;
-  reg [31 : 0] internal_d_prim;
+  
+  
+      wire [31 : 0] a0;
+      wire[31 : 0] a1;
+      wire [31 : 0] a2;
+      wire [31 : 0] a3;
+
+      wire [31 : 0] b0;
+      wire [31 : 0] b1;
+      wire [31 : 0] b2;
+      wire [31 : 0] b3;
+
+      wire [31 : 0] c0;
+      wire [31 : 0] c1;
+      wire [31 : 0] c2;
+      wire [31 : 0] c3;
+      
 
 
-  //----------------------------------------------------------------
-  // Concurrent connectivity for ports.
-  //----------------------------------------------------------------
-  assign a_prim = internal_a_prim;
-  assign b_prim = internal_b_prim;
-  assign c_prim = internal_c_prim;
-  assign d_prim = internal_d_prim;
+      wire [31 : 0] d0;
+      wire [31 : 0] d1;
+      wire [31 : 0] d2;
+      wire [31 : 0] d3;
+      wire [31:0] a0_, d1_, c0_, b1_;
+      
+    
+     quarter_round q1(a, b, d, 2'd0, a0, d1);
+     quarter_round q2(c, d1, b, 2'd1, c0, b1);
+     quarter_round q3(a0, b1, d1,2'd2, a1, d3);
+     quarter_round q4(c0, d3, b1, 2'd3, c1, b3);
 
-
-  //----------------------------------------------------------------
-  // qr
-  //
-  // The actual quarterround function.
-  //----------------------------------------------------------------
-  always @*
-    begin : qr
-      reg [31 : 0] a0;
-      reg [31 : 0] a1;
-
-      reg [31 : 0] b0;
-      reg [31 : 0] b1;
-      reg [31 : 0] b2;
-      reg [31 : 0] b3;
-
-      reg [31 : 0] c0;
-      reg [31 : 0] c1;
-
-      reg [31 : 0] d0;
-      reg [31 : 0] d1;
-      reg [31 : 0] d2;
-      reg [31 : 0] d3;
-
-      a0 = a + b;
-      d0 = d ^ a0;
-      d1 = {d0[15 : 0], d0[31 : 16]};
-      c0 = c + d1;
-      b0 = b ^ c0;
-      b1 = {b0[19 : 0], b0[31 : 20]};
-      a1 = a0 + b1;
-      d2 = d1 ^ a1;
-      d3 = {d2[23 : 0], d2[31 : 24]};
-      c1 = c0 + d3;
-      b2 = b1 ^ c1;
-      b3 = {b2[24 : 0], b2[31 : 25]};
-
-      internal_a_prim = a1;
-      internal_b_prim = b3;
-      internal_c_prim = c1;
-      internal_d_prim = d3;
-    end // qr
+  assign a_prim = a1;
+  assign b_prim = b3;
+  assign c_prim = c1;
+  assign d_prim = d3;
+    
 endmodule // chacha_qr
-
-//======================================================================
-// EOF chacha_qr.v
-//======================================================================
