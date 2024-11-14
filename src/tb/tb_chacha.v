@@ -140,7 +140,6 @@ module tb_chacha();
   reg  [7 : 0]  tb_address;
   reg  [31 : 0] tb_data_in;
   wire [31 : 0] tb_data_out;
-  wire          tb_error;
 
   reg [63 : 0] cycle_ctr;
   reg [31 : 0] error_ctr;
@@ -261,6 +260,8 @@ module tb_chacha();
       tb_write_read = 0;
       tb_address    = 8'h0;
       tb_data_in    = 32'h0;
+      
+      error_found=0;
 
       display_cycle_ctr  = 0;
       display_read_write = 0;
@@ -492,6 +493,7 @@ module tb_chacha();
   //----------------------------------------------------------------
   task start_init_block;
     begin
+      
       write_reg(ADDR_CTRL, 32'h00000001);
       #(2 * CLK_PERIOD);
       write_reg(ADDR_CTRL, 32'h00000000);
@@ -670,6 +672,7 @@ module tb_chacha();
 
       if (extracted_data != expected)
         begin
+          error_found=1;
           error_ctr = error_ctr + 1;
           $display("***TC%2d-%2d - ERROR", major, minor);
           $display("***-----------------");
@@ -716,6 +719,7 @@ module tb_chacha();
 
       if (extracted_data != expected)
         begin
+          error_found=1;
           error_ctr = error_ctr + 1;
           $display("***TC%2d-%2d - ERROR", major, minor);
           $display("***-----------------");
@@ -758,6 +762,38 @@ module tb_chacha();
                     EIGHT_ROUNDS,
                     512'he28a5fa4a67f8c5defed3e6fb7303486aa8427d31419a729572d777953491120b64ab8e72b8deb85cd6aea7cb6089a101824beeb08814a428aab1fa2c816081b);
 
+      $display("TC1-2: All zero inputs. 128 bit key, 12 rounds.");
+      run_test_vector(TC1, ONE,
+                    256'h0,
+                    KEY_128_BITS,
+                    64'h0,
+                    TWELWE_ROUNDS,
+                    512'he1047ba9476bf8ff312c01b4345a7d8ca5792b0ad467313f1dc412b5fdce32410dea8b68bd774c36a920f092a04d3f95274fbeff97bc8491fcef37f85970b450 );
+
+      $display("TC1-3: All zero inputs. 128 bit key, 20 rounds.");
+      run_test_vector(TC1, ONE,
+                    256'h0,
+                    KEY_128_BITS,
+                    64'h0,
+                    TWENTY_ROUNDS,
+                    512'h89670952608364fd00b2f90936f031c8e756e15dba04b8493d00429259b20f46cc04f111246b6c2ce066be3bfb32d9aa0fddfbc12123d4b9e44f34dca05a103f );
+
+     $display(" All zero inputs. 256 bit key, 20 rounds.");
+      run_test_vector(TC1, ONE,
+                    256'h0,
+                    KEY_256_BITS,
+                    64'h0,
+                    TWENTY_ROUNDS,
+                    512'h76b8e0ada0f13d90405d6ae55386bd28bdd219b8a08ded1aa836efcc8b770dc7da41597c5157488d7724e03fb8d84a376a43b8f41518a11cc387b669b2ee6586 );
+
+      $display("TC1-5: All zero inputs. 256 bit key, 12 rounds.");
+      run_test_vector(TC1, ONE,
+                    256'h0,
+                    KEY_256_BITS,
+                    64'h0,
+                    TWELWE_ROUNDS,
+                    512'h9bf49a6a0755f953811fce125f2683d50429c3bb49e074147e0089a52eae155f0564f879d27ae3c02ce82834acfa8c793a629f2ca0de6919610be82f411326be  );
+
       $display("TC7-2: Increasing, decreasing sequences in key and IV. 256 bit key, 8 rounds.");
       run_test_vector(TC7, TWO,
                     256'h00112233445566778899aabbccddeeffffeeddccbbaa99887766554433221100,
@@ -776,6 +812,25 @@ module tb_chacha();
                                  EIGHT_ROUNDS,
                                  512'hfe882395601ce8aded444867fe62ed8741420002e5d28bb573113a418c1f4008e954c188f38ec4f26bb8555e2b7c92bf4380e2ea9e553187fdd42821794416de);
 
+      $display("TC1-4: inputs. 256 bit key, 20 rounds.");
+
+     run_test_vector(TC7, FOUR,
+                    256'h00112233445566778899aabbccddeeffffeeddccbbaa99887766554433221100,
+                    KEY_256_BITS,
+                    64'h0f1e2d3c4b5a6978,
+                    TWENTY_ROUNDS,
+                    512'h9fadf409c00811d00431d67efbd88fba59218d5d6708b1d685863fabbb0e961eea480fd6fb532bfd494b2151015057423ab60a63fe4f55f7a212e2167ccab931);
+      $display("TC1-4_secondblock: inputs.256 bit key, 20 rounds.");
+
+     run_two_blocks_test_vector(TC7, FOUR,
+                    256'h00112233445566778899aabbccddeeffffeeddccbbaa99887766554433221100,
+                    KEY_256_BITS,
+                    64'h0f1e2d3c4b5a6978,
+                    TWENTY_ROUNDS,
+                    512'hfbfd29cf7bc1d279eddf25dd316bb8843d6edee0bd1ef121d12fa17cbc2c574cccab5e275167b08bd686f8a09df87ec3ffb35361b94ebfa13fec0e4889d18da5);
+     
+    
+      
 
       display_test_result();
       $display("*** chacha simulation done.");
@@ -786,3 +841,5 @@ endmodule // tb_chacha
 //======================================================================
 // EOF tb_chacha.v
 //======================================================================
+
+    
