@@ -1,5 +1,4 @@
 Note:
-
       The repo contains an improved version of the quarter-round RTL code compared to the base RTL of secworks.            The chacha_qr.v is modified in such a way that it suits the pipelining approaches.
       Also the tb_chacha.v has been modified, the signal tb_error has been removed and error_found signal is               initialised properly.
       The given rtl has been tested and synthesized using cadence design suite. Achieved area and power reductions         of 1.94% and 17.8%, respectively.
