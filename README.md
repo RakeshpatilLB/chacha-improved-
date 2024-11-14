@@ -4,7 +4,6 @@ Note:
       The given rtl has been tested and synthesized using cadence design suite. Achieved area and power reductions         of 1.94% and 17.8%, respectively.
 
 
-[![build-openlane-sky130](https://github.com/secworks/chacha/actions/workflows/ci.yml/badge.svg?branch=master&event=push)](https://github.com/secworks/chacha/actions/workflows/ci.yml)
 
 chacha
 ========
