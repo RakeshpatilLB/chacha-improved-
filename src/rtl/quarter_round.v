@@ -1,4 +1,3 @@
-`timescale 1ns / 1ps
 module quarter_round(
 input wire [31:0] a, b, c,
 input wire [1:0] sht_amt,
