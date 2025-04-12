@@ -11,7 +11,7 @@ chacha
 Verilog 2001 implementation of the ChaCha stream cipher.
 
 ## Status ##
-The core is completed and has been implemented and used in several FPGA
+The core(Base RTL) is completed and has been implemented and used in several FPGA
 designs. The core is for example used as the CSPRNG/DRBG part of the
 random number generator (RNG) in the [Cryptech
 HSM](https://cryptech.is/).
